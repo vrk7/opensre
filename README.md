@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Tracer-Cloud/open-sre-agent/main/app/icons/BannerGithub.png" alt="Tracer Banner" width="100%">
+  <img width="2136" height="476" alt="github-readme-tracer-banner" src="https://github.com/user-attachments/assets/fac67ac2-e40e-4d58-8421-829ed0ce2a4d" />
 </p>
 
 <h1>Open SRE — Build Your Own AI SRE Agents</h1>
@@ -246,10 +246,3 @@ See [SECURITY.md](SECURITY.md) for responsible disclosure.
 ## License
 
 Apache 2.0 - see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-  <sub>Built with ❤️ by the Tracer team and contributors worldwide.</sub><br>
-  <sub>⭐ Star us on GitHub — it helps more engineers find Tracer.</sub>
-</div>
