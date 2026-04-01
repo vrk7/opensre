@@ -312,12 +312,8 @@ def node_resolve_integrations(state: InvestigationState) -> dict:
       2. JWT_TOKEN env var — remote API, with local store/env filling missing services
       3. Local sources: ~/.tracer/integrations.json, plus env-based integrations for standalone use
     """
-    import logging
-
     tracker = get_tracker()
     tracker.start("resolve_integrations", "Fetching org integrations")
-
-    log = logging.getLogger(__name__)
     org_id = state.get("org_id", "")
 
     webhook_token = _strip_bearer(state.get("_auth_token", "").strip())
@@ -325,7 +321,7 @@ def node_resolve_integrations(state: InvestigationState) -> dict:
         if not org_id:
             org_id = _decode_org_id_from_token(webhook_token)
         if not org_id:
-            log.warning("_auth_token present but could not decode org_id")
+            logger.warning("_auth_token present but could not decode org_id")
             tracker.complete(
                 "resolve_integrations",
                 fields_updated=["resolved_integrations"],
@@ -336,7 +332,7 @@ def node_resolve_integrations(state: InvestigationState) -> dict:
             from app.integrations.clients.tracer_client import get_tracer_client_for_org
             all_integrations = get_tracer_client_for_org(org_id, webhook_token).get_all_integrations()
         except Exception as exc:
-            log.warning("Remote integrations fetch failed: %s", exc)
+            logger.warning("Remote integrations fetch failed: %s", exc)
             tracker.complete(
                 "resolve_integrations",
                 fields_updated=["resolved_integrations"],
