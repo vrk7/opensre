@@ -1,4 +1,4 @@
-"""Seed a local Grafana+Loki demo stack with sample failure logs."""
+"""Seed a local Grafana+Loki stack with sample failure logs for the onboarding wizard."""
 
 from __future__ import annotations
 
@@ -94,44 +94,53 @@ def _supporting_log_stream(now_ns: int) -> dict[str, Any]:
     values = [
         [
             str(now_ns - 9_000_000_000),
-            json.dumps({
-                "event": "pipeline_context",
-                "run_id": DEMO_RUN_ID,
-                "correlation_id": DEMO_CORRELATION_ID,
-                "dataset": PIPELINE_NAME,
-                "warehouse": "analytics_wh",
-                "upstream_rows": 128,
-                "telemetry_source": "local_loki_seed",
-            }, separators=(",", ":")),
+            json.dumps(
+                {
+                    "event": "pipeline_context",
+                    "run_id": DEMO_RUN_ID,
+                    "correlation_id": DEMO_CORRELATION_ID,
+                    "dataset": PIPELINE_NAME,
+                    "warehouse": "analytics_wh",
+                    "upstream_rows": 128,
+                    "telemetry_source": "local_loki_seed",
+                },
+                separators=(",", ":"),
+            ),
         ],
         [
             str(now_ns - 5_000_000_000),
-            json.dumps({
-                "event": "credential_lookup",
-                "run_id": DEMO_RUN_ID,
-                "correlation_id": DEMO_CORRELATION_ID,
-                "secret_name": "snowflake/service-account",
-                "status": "stale_jwt",
-                "message": "JWT presented to Snowflake had expired before connect",
-            }, separators=(",", ":")),
+            json.dumps(
+                {
+                    "event": "credential_lookup",
+                    "run_id": DEMO_RUN_ID,
+                    "correlation_id": DEMO_CORRELATION_ID,
+                    "secret_name": "snowflake/service-account",
+                    "status": "stale_jwt",
+                    "message": "JWT presented to Snowflake had expired before connect",
+                },
+                separators=(",", ":"),
+            ),
         ],
         [
             str(now_ns - 3_000_000_000),
-            json.dumps({
-                "event": "pipeline_summary",
-                "run_id": DEMO_RUN_ID,
-                "correlation_id": DEMO_CORRELATION_ID,
-                "status": "failed",
-                "failed_stage": "load",
-                "root_signal": "snowflake_authentication",
-            }, separators=(",", ":")),
+            json.dumps(
+                {
+                    "event": "pipeline_summary",
+                    "run_id": DEMO_RUN_ID,
+                    "correlation_id": DEMO_CORRELATION_ID,
+                    "status": "failed",
+                    "failed_stage": "load",
+                    "root_signal": "snowflake_authentication",
+                },
+                separators=(",", ":"),
+            ),
         ],
     ]
     return {"stream": support_labels, "values": values}
 
 
 def build_log_streams(now_ns: int) -> list[dict[str, Any]]:
-    """Build all seeded log streams for the local Grafana demo."""
+    """Build all seeded log streams for the local Grafana onboarding stack."""
     return [
         _pipeline_log_stream(now_ns),
         _supporting_log_stream(now_ns),
@@ -148,12 +157,3 @@ def seed_logs() -> None:
         timeout=5,
     )
     response.raise_for_status()
-
-
-def main() -> int:
-    seed_logs()
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
