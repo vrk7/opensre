@@ -38,7 +38,7 @@ ANTHROPIC_MODELS = (
 )
 
 OPENAI_MODELS = (
-    ModelOption(value=DEFAULT_OPENAI_MODEL, label="GPT-5.2"),
+    ModelOption(value=DEFAULT_OPENAI_MODEL, label="GPT-4o"),
     ModelOption(value="gpt-5-mini", label="GPT-5 mini"),
     ModelOption(value="o4-mini", label="o4-mini"),
 )
