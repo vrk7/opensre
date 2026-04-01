@@ -385,7 +385,7 @@ def _configure_grafana_local() -> tuple[str, str]:
         _console.print("[dim]Start Docker Desktop, then run [bold]opensre onboard[/bold] again.[/]")
         return "Grafana Local (skipped)", ""
 
-    compose_file = str(Path(__file__).parents[3] / "app/demo/local_grafana_stack/docker-compose.yml")
+    compose_file = str(Path(__file__).parent / "local_grafana_stack/docker-compose.yml")
     with _console.status("Starting Grafana + Loki (docker compose up -d)...", spinner="dots"):
         result = subprocess.run(
             ["docker", "compose", "-f", compose_file, "up", "-d"],
@@ -399,7 +399,7 @@ def _configure_grafana_local() -> tuple[str, str]:
 
     with _console.status("Waiting for Loki to be ready and seeding logs...", spinner="dots"):
         try:
-            from app.demo.local_grafana_seed import seed_logs
+            from app.cli.wizard.grafana_seed import seed_logs
             seed_logs()
         except (SystemExit, Exception) as exc:
             _console.print(f"[red]Loki seed failed: {exc}[/]")
@@ -414,7 +414,7 @@ def _configure_grafana_local() -> tuple[str, str]:
     _console.print(f"[dim]UI: {endpoint}[/]")
     _console.print("[dim]Loki seeded with events_fact pipeline failure logs.[/]")
     _console.print("[dim]Run RCA:[/]")
-    _console.print("[bold]  opensre investigate -i tests/fixtures/grafana_local_alert.json[/]")
+    _console.print("[bold]  opensre investigate -i tests/e2e/kubernetes/fixtures/datadog_k8s_alert.json[/]")
     return "Grafana Local", str(env_path)
 
 
@@ -749,10 +749,20 @@ def _configure_selected_integrations() -> tuple[list[str], str | None]:
             label, env_path = handlers[service]()
             configured.append(label)
             last_env_path = env_path
+            _track_integration_added(service)
         except KeyboardInterrupt:
             _console.print(f"[yellow]{_SERVICE_LABELS.get(service, service)} setup skipped.[/]")
 
     return configured, last_env_path
+
+
+def _track_integration_added(service: str) -> None:
+    try:
+        from app.analytics.cli import capture_integration_added
+
+        capture_integration_added(service)
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def _render_demo_response(demo_response: dict) -> None:
@@ -773,7 +783,7 @@ def _render_demo_response(demo_response: dict) -> None:
 def _render_next_steps() -> None:
     _console.print("\n[bold]next[/]")
     _console.print("[dim]opensre onboard[/]")
-    _console.print("[dim]opensre investigate -i tests/fixtures/grafana_local_alert.json[/]")
+    _console.print("[dim]opensre investigate -i tests/e2e/kubernetes/fixtures/datadog_k8s_alert.json[/]")
 
 
 def run_wizard(_argv: list[str] | None = None) -> int:

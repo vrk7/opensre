@@ -9,6 +9,15 @@ from dataclasses import dataclass
 from enum import Enum
 
 
+@dataclass(frozen=True)
+class LLMModelConfig:
+    """Configuration for an LLM provider's model variants."""
+
+    reasoning_model: str
+    toolcall_model: str
+    max_tokens: int
+
+
 class Environment(Enum):
     """Application environment."""
 
@@ -63,9 +72,26 @@ def get_clerk_config() -> ClerkConfig:
 # JWT Configuration
 JWT_ALGORITHM = "RS256"
 JWKS_CACHE_TTL_SECONDS = 3600
-DEFAULT_MODEL = "claude-opus-4-5"
-DEFAULT_OPENAI_MODEL = "gpt-4o"
+ANTHROPIC_REASONING_MODEL = "claude-opus-4-5"
+ANTHROPIC_TOOLCALL_MODEL = "claude-sonnet-4-20250514"
+OPENAI_REASONING_MODEL = "gpt-4o"
+OPENAI_TOOLCALL_MODEL = "gpt-4o-mini"
+DEFAULT_MODEL = ANTHROPIC_REASONING_MODEL
+DEFAULT_OPENAI_MODEL = OPENAI_REASONING_MODEL
 DEFAULT_MAX_TOKENS = 4096
+
+# LLM Provider Configs
+ANTHROPIC_LLM_CONFIG = LLMModelConfig(
+    reasoning_model=ANTHROPIC_REASONING_MODEL,
+    toolcall_model=ANTHROPIC_TOOLCALL_MODEL,
+    max_tokens=DEFAULT_MAX_TOKENS,
+)
+
+OPENAI_LLM_CONFIG = LLMModelConfig(
+    reasoning_model=OPENAI_REASONING_MODEL,
+    toolcall_model=OPENAI_TOOLCALL_MODEL,
+    max_tokens=DEFAULT_MAX_TOKENS,
+)
 
 # Tracer API Configuration
 TRACER_BASE_URL_DEV = "https://staging.tracer.cloud"
