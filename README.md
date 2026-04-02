@@ -55,9 +55,6 @@ We do that by:
 
 Our goal is to scale this into thousands of realistic infrastructure failure scenarios and become the benchmark and training ground for AI SRE.
 
-<sup>1</sup> https://arxiv.org/abs/2310.06770
-
-
 ## Install
 
 ```bash
@@ -318,3 +315,7 @@ export OPENSRE_NO_TELEMETRY=1
 ## License
 
 Apache 2.0 - see [LICENSE](LICENSE) for details.
+
+## Citations
+<sup>1</sup> https://arxiv.org/abs/2310.06770
+
