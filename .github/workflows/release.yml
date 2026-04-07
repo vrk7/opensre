@@ -238,9 +238,9 @@ jobs:
             echo "## Changelog"
             echo
             if [ -n "$previous_tag" ]; then
-              echo "_Changes since $previous_tag_"
+              echo "_Changes since ${previous_tag}_"
             else
-              echo "_Changes up to $TAG_NAME_"
+              echo "_Changes up to ${TAG_NAME}_"
             fi
             echo
             git log "$range_spec" --no-merges --pretty='- %s (%h) — %an'
